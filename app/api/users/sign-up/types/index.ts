@@ -9,3 +9,9 @@ export const SignUpRequestScheme = z.object({
 });
 
 export type SignUpRequest = z.infer<typeof SignUpRequestScheme>;
+
+export type StateSignUpResult =
+  | "parsed"
+  | "enrolled"
+  | "not-parsed"
+  | "not-enrolled";

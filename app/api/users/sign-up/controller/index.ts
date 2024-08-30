@@ -1,14 +1,9 @@
 import { parseRequest } from "../parser";
 import { signUpUser } from "../repo";
-
-export type StateCreateResult =
-  | "parsed"
-  | "enrolled"
-  | "not-parsed"
-  | "not-created";
+import type { StateSignUpResult } from "../types";
 
 export type SignUpUserResult = {
-  state: StateCreateResult;
+  state: StateSignUpResult;
   message: string;
 };
 
@@ -19,7 +14,7 @@ export const signUpUserIfRequestIsValid = (request: any): SignUpUserResult => {
   }
   const { enrolled: created, message: createrMessage } = signUpUser(data!);
   if (!created) {
-    return { state: "not-created", message: createrMessage };
+    return { state: "not-enrolled", message: createrMessage };
   }
   return { state: "enrolled", message: "User sign up successfully" };
 };
