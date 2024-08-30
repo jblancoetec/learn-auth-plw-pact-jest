@@ -7,13 +7,15 @@ export type SignUpUserResult = {
   message: string;
 };
 
-export const signUpUserIfRequestIsValid = (request: any): SignUpUserResult => {
+export const signUpUserIfRequestIsValid = async (
+  request: any,
+): Promise<SignUpUserResult> => {
   const { parsed, message: parserMessage, data } = parseRequest(request);
   if (!parsed) {
     return { state: "not-parsed", message: parserMessage };
   }
-  const { enrolled: created, message: createrMessage } = signUpUser(data!);
-  if (!created) {
+  const { enrolled, message: createrMessage } = await signUpUser(data!);
+  if (!enrolled) {
     return { state: "not-enrolled", message: createrMessage };
   }
   return { state: "enrolled", message: "User sign up successfully" };

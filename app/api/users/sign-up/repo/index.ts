@@ -10,25 +10,33 @@ export type SignUpUserResult = {
 
 export type SignUpUserProps = SignUpRequest;
 
-export const signUpUser = (props: SignUpUserProps): SignUpUserResult => {
-  const result = { enrolled: false, message: "" };
-  const user = { ...props };
-  bcrypt.hash(user.password, 10).then((hash) => {
-    user.password = hash;
-  });
-  db.users
-    .create({ data: user })
-    .then(() => {
-      result.enrolled = true;
-      result.message = "User enrolled";
-    })
-    .catch((error) => {
-      const isPrismaError =
-        error instanceof Prisma.PrismaClientKnownRequestError ||
-        error instanceof Prisma.PrismaClientUnknownRequestError;
-      result.enrolled = false;
-      result.message = isPrismaError ? error.message : "Unknown error";
-    });
+export const signUpUser = async (
+  props: SignUpUserProps,
+): Promise<SignUpUserResult> => {
+  try {
+    const user = { ...props };
+    return await create(user);
+  } catch (error) {
+    return handle(error);
+  }
+};
 
-  return result;
+const create = async (user: SignUpUserProps): Promise<SignUpUserResult> => {
+  const hash = await bcrypt.hash(user.password, 10);
+  user.password = hash;
+  await db.users.create({ data: user });
+  return {
+    enrolled: true,
+    message: "User enrolled",
+  };
+};
+
+const handle = (error: unknown): SignUpUserResult => {
+  const isPrismaError =
+    error instanceof Prisma.PrismaClientKnownRequestError ||
+    error instanceof Prisma.PrismaClientUnknownRequestError;
+  return {
+    enrolled: false,
+    message: isPrismaError ? error.message : "Unknown error",
+  };
 };

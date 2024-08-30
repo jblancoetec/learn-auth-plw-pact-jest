@@ -1,8 +1,8 @@
 import { signUpUserIfRequestIsValid } from "./controller";
 import { reply } from "./response";
 
-const POST = (req: Request) => {
-  const result = signUpUserIfRequestIsValid(req.body);
+const POST = async (req: Request): Promise<Response> => {
+  const result = await signUpUserIfRequestIsValid(req.body);
   return reply(result);
 };
 
