@@ -1,7 +1,7 @@
-import { StateCreateResult } from "../controller/types";
+import type { StateSignUpUserResult } from "../controller";
 
-export const statusCode = new Map<StateCreateResult, number>();
-statusCode.set("created", 201);
+export const statusCode = new Map<StateSignUpUserResult, number>();
+statusCode.set("enrolled", 201);
 statusCode.set("parsed", 202);
 statusCode.set("not-parsed", 400);
-statusCode.set("not-created", 500);
+statusCode.set("not-enrolled", 500);

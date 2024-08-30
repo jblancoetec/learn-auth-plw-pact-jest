@@ -1,13 +1,13 @@
-import { SignUpUserProps } from "../types";
 import { useProcessStatus } from "@/app/hooks";
 import { useBrowser } from "@/app/hooks";
 import { post } from "../api";
+import { SignUpProps } from "../types";
 
 export const useSignUpProcess = () => {
   const process = useProcessStatus();
   const browser = useBrowser();
 
-  const signUp = (user: SignUpUserProps) => {
+  const signUp = (user: SignUpProps) => {
     post(user, {
       initPost() {
         process.setLoading();

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SignUpUserProps } from "../types";
+import { SignUpProps } from "../types";
 
 export type PostActions = {
   initPost: () => void;
@@ -7,7 +7,9 @@ export type PostActions = {
   endPostWithProblems: (error: string) => void;
 };
 
-export const post = async (user: SignUpUserProps, actions: PostActions) => {
+export type PostUserProps = SignUpProps;
+
+export const post = async (user: PostUserProps, actions: PostActions) => {
   const { initPost, endPostWithSuccess, endPostWithProblems } = actions;
 
   initPost();

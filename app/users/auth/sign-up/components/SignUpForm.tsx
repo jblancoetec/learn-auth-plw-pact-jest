@@ -8,8 +8,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { OnCompleteSignUpFormEvent, OnCompleteSignUpFormProps } from "../types";
 import { useForm } from "react-hook-form";
+import { SignUpProps } from "../types";
+
+export type OnCompleteSignUpFormProps = SignUpProps;
+
+export type OnCompleteSignUpFormEvent = (
+  props: OnCompleteSignUpFormProps,
+) => void;
 
 const SignUpForm = ({
   onCompleted,
@@ -71,13 +77,13 @@ const SignUpForm = ({
               id="password-to-confirm-field"
               placeholder="Repetir contraseña"
               required
-              error={watch("password") !== watch("passwordToConfirm")}
+              error={watch("password") !== watch("confirm")}
               helperText={
-                watch("password") !== watch("passwordToConfirm")
+                watch("password") !== watch("confirm")
                   ? "Las contraseñas no coinciden"
                   : ""
               }
-              {...register("passwordToConfirm", { required: true })}
+              {...register("confirm", { required: true })}
             />
             <Button variant="contained" type="submit">
               continuar
