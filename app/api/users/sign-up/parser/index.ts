@@ -10,16 +10,16 @@ export type ParseRequestResult = {
 };
 
 export const parseRequest = (request: any): ParseRequestResult => {
-  const user = SignUpRequestScheme.safeParse(request);
-  if (user.error) {
-    return { parsed: false, message: user.error.message };
+  const parsedRequest = SignUpRequestScheme.safeParse(request);
+  if (parsedRequest.error) {
+    return { parsed: false, message: parsedRequest.error.message };
   }
-  if (user.data.password !== user.data.confirm) {
+  if (parsedRequest.data.password !== parsedRequest.data.confirm) {
     return { parsed: false, message: "Passwords do not match" };
   }
   return {
     parsed: true,
     message: "Props are valid",
-    data: user.data,
+    data: parsedRequest.data,
   };
 };

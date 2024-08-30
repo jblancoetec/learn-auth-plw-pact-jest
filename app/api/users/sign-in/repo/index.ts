@@ -1,10 +1,13 @@
 import db from "@/db";
-import { SignInRequest } from "../types";
+import { SignInRequest, StateSignInUserResult } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { Prisma, Users } from "@prisma/client";
+
+type User = Users;
 
 export type SignInUserResult = {
-  accepted: boolean;
+  state: StateSignInUserResult;
   message: string;
   token?: string;
 };
@@ -14,22 +17,45 @@ export type SignInUserProps = SignInRequest;
 export const signInUser = async (
   props: SignInUserProps,
 ): Promise<SignInUserResult> => {
+  try {
+    const user = await find(props);
+    return await tokenize(user);
+  } catch (error) {
+    return handle(error);
+  }
+};
+
+class UserNotFoundError extends Error {
+  constructor(public reason: StateSignInUserResult = "not-found") {
+    super("User not found");
+    Object.setPrototypeOf(this, UserNotFoundError.prototype);
+  }
+}
+
+class PasswordNotMatchError extends Error {
+  constructor(public reason: StateSignInUserResult = "not-accepted") {
+    super("Password incorrect");
+    Object.setPrototypeOf(this, UserNotFoundError.prototype);
+  }
+}
+
+const find = async (props: SignInUserProps): Promise<User> => {
   const user = await db.users.findUnique({
     where: {
       email: props.email,
     },
   });
-
   if (!user) {
-    return { accepted: false, message: "User not found" };
+    throw new UserNotFoundError();
   }
-
-  const passwordCorrect = await bcrypt.compare(props.password, user.password);
-
-  if (!passwordCorrect) {
-    return { accepted: false, message: "Password incorrect" };
+  const correctPass = await bcrypt.compare(props.password, user.password);
+  if (!correctPass) {
+    throw new PasswordNotMatchError();
   }
+  return user;
+};
 
+const tokenize = async (user: User): Promise<SignInUserResult> => {
   const secret = process.env.JWT_SECRET ?? "secret";
   const token = jwt.sign(
     {
@@ -44,5 +70,20 @@ export const signInUser = async (
     },
   );
 
-  return { accepted: true, message: "User accepted", token };
+  return { state: "accepted", message: "User accepted", token };
+};
+
+const handle = (error: unknown): SignInUserResult => {
+  const isPrismaError =
+    error instanceof Prisma.PrismaClientKnownRequestError ||
+    error instanceof Prisma.PrismaClientUnknownRequestError;
+
+  const isFindUserError =
+    error instanceof UserNotFoundError ||
+    error instanceof PasswordNotMatchError;
+
+  return {
+    state: isFindUserError ? error.reason : "internal-error",
+    message: isPrismaError || isFindUserError ? error.message : "Unknown error",
+  };
 };

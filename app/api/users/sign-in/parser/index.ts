@@ -10,13 +10,13 @@ export type ParseRequestResult = {
 };
 
 export const parseRequest = (request: any): ParseRequestResult => {
-  const user = SignInRequestScheme.safeParse(request);
-  if (user.error) {
-    return { parsed: false, message: user.error.message };
+  const parsedRequest = SignInRequestScheme.safeParse(request);
+  if (parsedRequest.error) {
+    return { parsed: false, message: parsedRequest.error.message };
   }
   return {
     parsed: true,
     message: "Props are valid",
-    data: user.data,
+    data: parsedRequest.data,
   };
 };

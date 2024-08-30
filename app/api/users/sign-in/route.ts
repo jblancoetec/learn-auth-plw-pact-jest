@@ -1,9 +1,9 @@
 import { signInUserIfRequestIsValid } from "./controller";
+import { reply } from "./response";
 
-const GET = (req: Request) => {
-  const result = signInUserIfRequestIsValid(req.body);
-  const code = result.found ? 200 : 404;
-  return Response.json(result, { status: code });
+const GET = async (req: Request): Promise<Response> => {
+  const result = await signInUserIfRequestIsValid(req.body);
+  return reply(result);
 };
 
 export { GET };
