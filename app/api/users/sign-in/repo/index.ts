@@ -3,6 +3,7 @@ import { SignInRequest, StateSignInUserResult } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Prisma, Users } from "@prisma/client";
+import { UserNotFoundError, PasswordNotMatchError } from "../errors";
 
 type User = Users;
 
@@ -24,20 +25,6 @@ export const signInUser = async (
     return handle(error);
   }
 };
-
-class UserNotFoundError extends Error {
-  constructor(public reason: StateSignInUserResult = "not-found") {
-    super("User not found");
-    Object.setPrototypeOf(this, UserNotFoundError.prototype);
-  }
-}
-
-class PasswordNotMatchError extends Error {
-  constructor(public reason: StateSignInUserResult = "not-accepted") {
-    super("Password incorrect");
-    Object.setPrototypeOf(this, UserNotFoundError.prototype);
-  }
-}
 
 const find = async (props: SignInUserProps): Promise<User> => {
   const user = await db.users.findUnique({
