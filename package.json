@@ -10,6 +10,7 @@
     "tests": "bun test **/*.test.ts",
     "tests:watch": "bun test --watch **/*.test.ts",
     "create:scene": "bunx playwright codegen",
+    "init": "bunx prisma migrate dev --name init",
     "lint": "next lint"
   },
   "dependencies": {
