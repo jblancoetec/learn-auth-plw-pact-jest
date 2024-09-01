@@ -1,7 +1,6 @@
-import { SignUpUserResult } from "../controller";
-import { StateSignUpResult } from "../types";
+import { SignUpUserResult, StateSignUpUserResult } from "../types";
 
-export const statusCode = new Map<StateSignUpResult, number>();
+const statusCode = new Map<StateSignUpUserResult, number>();
 statusCode.set("enrolled", 201);
 statusCode.set("parsed", 202);
 statusCode.set("not-parsed", 400);

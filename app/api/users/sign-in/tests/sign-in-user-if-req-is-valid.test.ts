@@ -1,8 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import { signInUserIfRequestIsValid } from "../controller";
-import db from "@/db";
-import bcrypt from "bcrypt";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { initDB, cleanDB } from "./utils";
 
 describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contraseña, para poder operar con el mismo", () => {
   test("Dado un correo y una contraseña válidos, se debe devolver un token de acceso", async () => {
@@ -26,29 +24,10 @@ describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contra
   });
 
   beforeAll(async () => {
-    try {
-      await db.users.create({
-        data: {
-          email: "jdoe@test.com",
-          password: await bcrypt.hash("passtesting", 10),
-          name: "John",
-          lastname: "Doe",
-        },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        console.log(error.message);
-      }
-    }
+    await initDB();
   });
 
   afterAll(async () => {
-    try {
-      await db.users.deleteMany();
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        console.log(error.message);
-      }
-    }
+    await cleanDB();
   });
 });

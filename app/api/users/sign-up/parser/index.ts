@@ -1,9 +1,9 @@
 import { SignUpRequestScheme } from "../types";
 import type { SignUpRequest } from "../types";
 
-export type ParsedData = SignUpRequest;
+type ParsedData = SignUpRequest;
 
-export type ParseRequestResult = {
+type ParseRequestResult = {
   parsed: boolean;
   message: string;
   data?: ParsedData;

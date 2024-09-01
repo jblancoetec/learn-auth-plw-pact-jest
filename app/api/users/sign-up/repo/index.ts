@@ -1,14 +1,9 @@
 import db from "@/db";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
-import { SignUpRequest } from "../types";
+import { SignUpRequest, SignUpUserResult } from "../types";
 
-export type SignUpUserResult = {
-  enrolled: boolean;
-  message: string;
-};
-
-export type SignUpUserProps = SignUpRequest;
+type SignUpUserProps = SignUpRequest;
 
 export const signUpUser = async (
   props: SignUpUserProps,
@@ -22,11 +17,17 @@ export const signUpUser = async (
 };
 
 const create = async (user: SignUpUserProps): Promise<SignUpUserResult> => {
-  const hash = await bcrypt.hash(user.password, 10);
-  user.password = hash;
-  await db.users.create({ data: user });
+  user.password = await bcrypt.hash(user.password, 10);
+  await db.users.create({
+    data: {
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password,
+    },
+  });
   return {
-    enrolled: true,
+    state: "enrolled",
     message: "User enrolled",
   };
 };
@@ -36,7 +37,7 @@ const handle = (error: unknown): SignUpUserResult => {
     error instanceof Prisma.PrismaClientKnownRequestError ||
     error instanceof Prisma.PrismaClientUnknownRequestError;
   return {
-    enrolled: false,
+    state: "not-enrolled",
     message: isPrismaError ? error.message : "Unknown error",
   };
 };

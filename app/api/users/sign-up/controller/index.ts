@@ -1,22 +1,10 @@
 import { parseRequest } from "../parser";
 import { signUpUser } from "../repo";
-import type { StateSignUpResult } from "../types";
-
-export type SignUpUserResult = {
-  state: StateSignUpResult;
-  message: string;
-};
+import type { SignUpUserResult } from "../types";
 
 export const signUpUserIfRequestIsValid = async (
   request: any,
 ): Promise<SignUpUserResult> => {
-  const { parsed, message: parserMessage, data } = parseRequest(request);
-  if (!parsed) {
-    return { state: "not-parsed", message: parserMessage };
-  }
-  const { enrolled, message: createrMessage } = await signUpUser(data!);
-  if (!enrolled) {
-    return { state: "not-enrolled", message: createrMessage };
-  }
-  return { state: "enrolled", message: "User sign up successfully" };
+  const { parsed, message, data } = parseRequest(request);
+  return parsed ? await signUpUser(data!) : { state: "not-parsed", message };
 };
