@@ -3,7 +3,7 @@ import { SignInRequest, StateSignInUserResult } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Prisma, Users } from "@prisma/client";
-import { UserNotFoundError, PasswordNotMatchError } from "../errors";
+import { UserOrPasswordIncorrect } from "../errors";
 
 type User = Users;
 
@@ -33,11 +33,11 @@ const find = async (props: SignInUserProps): Promise<User> => {
     },
   });
   if (!user) {
-    throw new UserNotFoundError();
+    throw new UserOrPasswordIncorrect();
   }
   const correctPass = await bcrypt.compare(props.password, user.password);
   if (!correctPass) {
-    throw new PasswordNotMatchError();
+    throw new UserOrPasswordIncorrect();
   }
   return user;
 };
@@ -65,12 +65,11 @@ const handle = (error: unknown): SignInUserResult => {
     error instanceof Prisma.PrismaClientKnownRequestError ||
     error instanceof Prisma.PrismaClientUnknownRequestError;
 
-  const isFindUserError =
-    error instanceof UserNotFoundError ||
-    error instanceof PasswordNotMatchError;
+  const isAUserOrPassError = error instanceof UserOrPasswordIncorrect;
 
   return {
-    state: isFindUserError ? error.reason : "internal-error",
-    message: isPrismaError || isFindUserError ? error.message : "Unknown error",
+    state: isAUserOrPassError ? error.reason : "internal-error",
+    message:
+      isPrismaError || isAUserOrPassError ? error.message : "Unknown error",
   };
 };
