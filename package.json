@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "tests:e2e": "bunx playwright test",
+    "tests:e2e": "next build && bunx playwright test",
     "tests": "bun test **/*.test.ts",
     "tests:watch": "bun test --watch **/*.test.ts",
     "create:scene": "bunx playwright codegen",

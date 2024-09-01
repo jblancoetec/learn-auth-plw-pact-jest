@@ -14,7 +14,7 @@ export const post = async (user: PostUserProps, actions: PostActions) => {
 
   initPost();
   try {
-    const response = await axios.post("/api/auth/sign-up", user, {
+    const response = await axios.post("/api/users/auth/sign-up", user, {
       headers: {
         "Content-Type": "application/json",
       },

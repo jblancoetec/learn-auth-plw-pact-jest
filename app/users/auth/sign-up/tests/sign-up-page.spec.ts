@@ -6,7 +6,7 @@ test.describe("Como usuario, quiero incribirme en el sistema para obtener una cu
   test("Si se rellenan adecuadamente, todos los campos requeridos, el sistema me redirige a sing-in", async ({
     page,
   }) => {
-    await page.route("*/**/api/auth/sign-up", async (route) => {
+    await page.route("*/**/api/users/auth/sign-up", async (route) => {
       await route.fulfill({ status: 201 });
     });
     await page.getByPlaceholder("Nombre").click();
