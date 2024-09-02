@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "tests:e2e": "next build && bunx playwright test",
-    "tests": "bun test **/*.test.ts",
+    "tests": "bun test **/*.test.ts && bunx playwright test",
     "tests:watch": "bun test --watch **/*.test.ts",
     "create:scene": "bunx playwright codegen",
     "init": "bunx prisma migrate dev --name init",

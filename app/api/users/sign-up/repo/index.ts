@@ -6,7 +6,7 @@ import { SignUpUserRequest, SignUpUserResult } from "../types";
 type SignUpUserProps = SignUpUserRequest;
 
 export const signUpUser = async (
-  props: SignUpUserProps,
+  props: SignUpUserProps
 ): Promise<SignUpUserResult> => {
   try {
     const user = { ...props };
@@ -40,7 +40,6 @@ const handle = (error: unknown): SignUpUserResult => {
   const isPrismaError =
     error instanceof Prisma.PrismaClientKnownRequestError ||
     error instanceof Prisma.PrismaClientUnknownRequestError;
-  console.error(error);
   return {
     status: INTERNAL_SERVER_ERROR,
     message: isPrismaError ? error.message : "Error desconocido",

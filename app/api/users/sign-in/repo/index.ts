@@ -9,9 +9,10 @@ type User = Users;
 type SignInUserProps = SignInUserRequest;
 
 const ACCEPTED = 202;
+const INTERNAL_SERVER_ERROR = 500;
 
 export const signInUser = async (
-  props: SignInUserProps,
+  props: SignInUserProps
 ): Promise<SignInUserResult> => {
   try {
     const user = await find(props);
@@ -49,7 +50,7 @@ const tokenize = async (user: User): Promise<SignInUserResult> => {
     secret,
     {
       expiresIn: "1h",
-    },
+    }
   );
 
   return {
@@ -59,15 +60,11 @@ const tokenize = async (user: User): Promise<SignInUserResult> => {
   };
 };
 
-const INTERNAL_SERVER_ERROR = 500;
-
 const handle = (error: unknown): SignInUserResult => {
   const isPrismaError =
     error instanceof Prisma.PrismaClientKnownRequestError ||
     error instanceof Prisma.PrismaClientUnknownRequestError;
-
   const isAUserOrPassError = error instanceof UserOrPasswordIncorrect;
-
   return {
     status: isAUserOrPassError ? error.status : INTERNAL_SERVER_ERROR,
     message:

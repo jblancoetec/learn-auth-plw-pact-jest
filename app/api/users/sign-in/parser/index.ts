@@ -13,7 +13,7 @@ export const parseRequest = (request: any): ParseRequestResult => {
   const { success, error, data } = SignInUserRequestScheme.safeParse(request);
   return {
     parsed: success,
-    message: error?.message ?? "Request parsed successfully",
+    message: error?.message ?? "Datos parseados correctamente",
     data: data,
   };
 };
