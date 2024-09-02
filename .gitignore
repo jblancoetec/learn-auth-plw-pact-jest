@@ -42,3 +42,6 @@ bun.lockb
 # playwright
 /test-results
 /playwright-report
+
+db
+test.db
