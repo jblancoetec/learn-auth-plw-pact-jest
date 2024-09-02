@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
-import { SignInUserResult } from "../repo";
-import { StateSignInUserResult } from "../types";
-
-export const statusCode = new Map<StateSignInUserResult, number>();
-statusCode.set("accepted", 202);
-statusCode.set("parsed", 202);
-statusCode.set("not-parsed", 400);
-statusCode.set("not-accepted", 401);
-statusCode.set("not-found", 404);
+import { SignInUserResult } from "../types";
 
 export const reply = (result: SignInUserResult): Response => {
-  const code = statusCode.get(result.state);
-  const response = NextResponse.json(result, { status: code });
+  const { status } = result;
+  const response = NextResponse.json(result, { status });
 
   response.cookies.set({
     name: "sign-in-token",
