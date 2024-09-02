@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
-import { signUpUserIfRequestIsValid } from "../controller";
+import { signUpUserIfRequestIsValid } from "..";
 import { cleanDB, initDB } from "./utils";
 
 describe("Como usuario, deseo registrarme en la aplicación para poder acceder a los servicios", () => {
@@ -12,8 +12,8 @@ describe("Como usuario, deseo registrarme en la aplicación para poder acceder a
       confirm: "passtotest",
     };
     const result = await signUpUserIfRequestIsValid(req);
-    expect(result.message).toBe("User enrolled");
-    expect(result.state).toBe("enrolled");
+    expect(result.message).toBe("Usuario registrado correctamente");
+    expect(result.status).toBe(201);
   });
 
   beforeAll(async () => {

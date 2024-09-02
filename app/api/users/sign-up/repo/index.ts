@@ -1,9 +1,9 @@
 import db from "@/db";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
-import { SignUpRequest, SignUpUserResult } from "../types";
+import { SignUpUserRequest, SignUpUserResult } from "../types";
 
-type SignUpUserProps = SignUpRequest;
+type SignUpUserProps = SignUpUserRequest;
 
 export const signUpUser = async (
   props: SignUpUserProps,
@@ -16,6 +16,8 @@ export const signUpUser = async (
   }
 };
 
+const CREATED = 201;
+
 const create = async (user: SignUpUserProps): Promise<SignUpUserResult> => {
   user.password = await bcrypt.hash(user.password, 10);
   await db.users.create({
@@ -27,17 +29,20 @@ const create = async (user: SignUpUserProps): Promise<SignUpUserResult> => {
     },
   });
   return {
-    state: "enrolled",
-    message: "User enrolled",
+    status: CREATED,
+    message: "Usuario registrado correctamente",
   };
 };
+
+const INTERNAL_SERVER_ERROR = 500;
 
 const handle = (error: unknown): SignUpUserResult => {
   const isPrismaError =
     error instanceof Prisma.PrismaClientKnownRequestError ||
     error instanceof Prisma.PrismaClientUnknownRequestError;
+  console.error(error);
   return {
-    state: "not-enrolled",
-    message: isPrismaError ? error.message : "Unknown error",
+    status: INTERNAL_SERVER_ERROR,
+    message: isPrismaError ? error.message : "Error desconocido",
   };
 };

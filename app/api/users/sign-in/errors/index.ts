@@ -1,8 +1,6 @@
-import { StateSignInUserResult } from "../types";
-
 export class UserOrPasswordIncorrect extends Error {
-  constructor(public reason: StateSignInUserResult = "not-accepted") {
-    super("User or password incorrect");
+  constructor(public status: number = 401) {
+    super("Usuario o contraseña incorrectos");
     Object.setPrototypeOf(this, UserOrPasswordIncorrect.prototype);
   }
 }

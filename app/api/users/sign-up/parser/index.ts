@@ -1,7 +1,7 @@
-import { SignUpRequestScheme } from "../types";
-import type { SignUpRequest } from "../types";
+import { SignUpUserRequestScheme } from "../types";
+import type { SignUpUserRequest } from "../types";
 
-type ParsedData = SignUpRequest;
+type ParsedData = SignUpUserRequest;
 
 type ParseRequestResult = {
   parsed: boolean;
@@ -10,16 +10,16 @@ type ParseRequestResult = {
 };
 
 export const parseRequest = (request: any): ParseRequestResult => {
-  const parsedRequest = SignUpRequestScheme.safeParse(request);
-  if (parsedRequest.error) {
-    return { parsed: false, message: parsedRequest.error.message };
+  const { error, data } = SignUpUserRequestScheme.safeParse(request);
+  if (error) {
+    return { parsed: false, message: error.message };
   }
-  if (parsedRequest.data.password !== parsedRequest.data.confirm) {
+  if (data.password !== data.confirm) {
     return { parsed: false, message: "Passwords do not match" };
   }
   return {
     parsed: true,
-    message: "Props are valid",
-    data: parsedRequest.data,
+    message: "Request is valid",
+    data,
   };
 };

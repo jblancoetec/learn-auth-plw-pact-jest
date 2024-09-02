@@ -1,7 +1,7 @@
-import { SignInRequestScheme } from "../types";
-import type { SignInRequest } from "../types";
+import { SignInUserRequestScheme } from "../types";
+import type { SignInUserRequest } from "../types";
 
-export type ParsedData = SignInRequest;
+export type ParsedData = SignInUserRequest;
 
 export type ParseRequestResult = {
   parsed: boolean;
@@ -10,10 +10,10 @@ export type ParseRequestResult = {
 };
 
 export const parseRequest = (request: any): ParseRequestResult => {
-  const parsedRequest = SignInRequestScheme.safeParse(request);
+  const { success, error, data } = SignInUserRequestScheme.safeParse(request);
   return {
-    parsed: parsedRequest.success,
-    message: parsedRequest.error?.message ?? "Request parsed successfully",
-    data: parsedRequest.data,
+    parsed: success,
+    message: error?.message ?? "Request parsed successfully",
+    data: data,
   };
 };

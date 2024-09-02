@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const SignUpRequestScheme = z.object({
+export const SignUpUserRequestScheme = z.object({
   name: z.string().min(2).max(255),
   lastname: z.string().min(2).max(255),
   email: z.string().email(),
@@ -8,15 +8,9 @@ export const SignUpRequestScheme = z.object({
   confirm: z.string().min(8),
 });
 
-export type SignUpRequest = z.infer<typeof SignUpRequestScheme>;
-
-export type StateSignUpUserResult =
-  | "parsed"
-  | "enrolled"
-  | "not-parsed"
-  | "not-enrolled";
+export type SignUpUserRequest = z.infer<typeof SignUpUserRequestScheme>;
 
 export type SignUpUserResult = {
-  state: StateSignUpUserResult;
+  status: number;
   message: string;
 };

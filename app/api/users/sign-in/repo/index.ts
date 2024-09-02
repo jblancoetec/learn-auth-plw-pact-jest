@@ -1,19 +1,14 @@
 import db from "@/db";
-import { SignInRequest, StateSignInUserResult } from "../types";
+import { SignInUserRequest, SignInUserResult } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Prisma, Users } from "@prisma/client";
 import { UserOrPasswordIncorrect } from "../errors";
 
 type User = Users;
+type SignInUserProps = SignInUserRequest;
 
-export type SignInUserResult = {
-  state: StateSignInUserResult;
-  message: string;
-  token?: string;
-};
-
-export type SignInUserProps = SignInRequest;
+const ACCEPTED = 202;
 
 export const signInUser = async (
   props: SignInUserProps,
@@ -57,8 +52,14 @@ const tokenize = async (user: User): Promise<SignInUserResult> => {
     },
   );
 
-  return { state: "accepted", message: "User accepted", token };
+  return {
+    status: ACCEPTED,
+    message: "Usuario autenticado correctamente",
+    token,
+  };
 };
+
+const INTERNAL_SERVER_ERROR = 500;
 
 const handle = (error: unknown): SignInUserResult => {
   const isPrismaError =
@@ -68,8 +69,8 @@ const handle = (error: unknown): SignInUserResult => {
   const isAUserOrPassError = error instanceof UserOrPasswordIncorrect;
 
   return {
-    state: isAUserOrPassError ? error.reason : "internal-error",
+    status: isAUserOrPassError ? error.status : INTERNAL_SERVER_ERROR,
     message:
-      isPrismaError || isAUserOrPassError ? error.message : "Unknown error",
+      isPrismaError || isAUserOrPassError ? error.message : "Error desconocido",
   };
 };
