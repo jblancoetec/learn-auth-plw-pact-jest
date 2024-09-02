@@ -21,7 +21,7 @@ export const initDB = async () => {
 
 export const cleanDB = async () => {
   try {
-    await db.users.deleteMany();
+    await db.users.deleteMany({});
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message);
