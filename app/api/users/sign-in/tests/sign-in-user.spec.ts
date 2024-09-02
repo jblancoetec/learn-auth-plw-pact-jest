@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { initDB, cleanDB } from "./utils";
 
 test.describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contraseña, para poder operar con el mismo", () => {
-  test("Si la api recibe usuario y contraseña validos, la respuesta esperada es un status 202", async ({
+  test("Si la api recibe usuario y contraseña validos, devuelve status code 202", async ({
     request,
   }) => {
     const response = await request.post("/api/users/sign-in", {
@@ -14,11 +14,24 @@ test.describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi c
     expect(response.status()).toBe(202);
   });
 
-  test.beforeAll(() => {
-    initDB();
+  test("Si la api recibe usuario y contraseña validos, devuelve le mensaje 'Usuario correctamente autenticado'", async ({
+    request,
+  }) => {
+    const response = await request.post("/api/users/sign-in", {
+      data: {
+        email: "jdoe@test.com",
+        password: "passtesting",
+      },
+    });
+    const data = await response.json();
+    expect(data.message).toBe("Usuario correctamente autenticado");
   });
 
-  test.afterAll(() => {
-    cleanDB();
+  test.beforeAll(async () => {
+    await initDB();
+  });
+
+  test.afterAll(async () => {
+    await cleanDB();
   });
 });

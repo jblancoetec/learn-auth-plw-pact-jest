@@ -10,7 +10,7 @@ describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contra
     });
     expect(result.token).toBeDefined();
     expect(result.status).toBe(202);
-    expect(result.message).toBe("Usuario autenticado correctamente");
+    expect(result.message).toBe("Usuario correctamente autenticado");
   });
 
   test("Dado un una contraseña invalida, no se debe devolver un token de acceso", async () => {

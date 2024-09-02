@@ -55,7 +55,7 @@ const tokenize = async (user: User): Promise<SignInUserResult> => {
 
   return {
     status: ACCEPTED,
-    message: "Usuario autenticado correctamente",
+    message: "Usuario correctamente autenticado",
     token,
   };
 };
