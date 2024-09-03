@@ -1,10 +1,8 @@
 "use client";
 
-import {
-  SignUpForm,
-  SignUpProcessError,
-  SignUpProcessProgress,
-} from "./components";
+import FeedbackError from "../components/FeedbackError";
+import FeedbackInProgress from "../components/FeedbackInProgress";
+import { SignUpForm } from "./components";
 import { useSignUpProcess } from "./hooks";
 
 const Page = () => {
@@ -12,8 +10,8 @@ const Page = () => {
 
   return (
     <>
-      <SignUpProcessProgress isLoading={isLoading()} />
-      <SignUpProcessError hasAProblem={isError()} problem={getInformation()} />
+      <FeedbackInProgress isLoading={isLoading()} />
+      <FeedbackError hasAProblem={isError()} problem={getInformation()} />
       <SignUpForm onCompleted={signUp} />
     </>
   );

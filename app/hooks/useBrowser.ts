@@ -4,5 +4,6 @@ export const useBrowser = () => {
   const router = useRouter();
   const toSignUpPage = () => router.push("/users/sign-up");
   const toSignInPage = () => router.push("/users/sign-in");
-  return { toSignInPage, toSignUpPage } as const;
+  const toHomePage = () => router.push("/");
+  return { toSignInPage, toSignUpPage, toHomePage } as const;
 };

@@ -1,7 +1,7 @@
 import { Alert } from "@mui/material";
 import { ProcessStatus, Status } from "@/app/hooks/useProcessStatus";
 
-const SignUpProcessError = ({
+const FeedbackError = ({
   hasAProblem,
   problem,
 }: {
@@ -11,4 +11,4 @@ const SignUpProcessError = ({
   return hasAProblem && <Alert severity="error">{problem}</Alert>;
 };
 
-export default SignUpProcessError;
+export default FeedbackError;

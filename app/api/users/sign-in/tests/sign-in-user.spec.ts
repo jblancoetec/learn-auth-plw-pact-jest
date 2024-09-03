@@ -14,7 +14,7 @@ test.describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi c
     expect(response.status()).toBe(202);
   });
 
-  test("Si la api recibe usuario y contraseña validos, devuelve le mensaje 'Usuario correctamente autenticado'", async ({
+  test("Si la api recibe usuario y contraseña validos, devuelve el mensaje 'Usuario correctamente autenticado'", async ({
     request,
   }) => {
     const response = await request.post("/api/users/sign-in", {
