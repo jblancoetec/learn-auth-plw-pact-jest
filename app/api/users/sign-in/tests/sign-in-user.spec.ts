@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { initDB, cleanDB } from "./utils";
+import { initDB, cleanDB } from "@/app/tests/utils";
 
 test.describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contraseña, para poder operar con el mismo", () => {
   test("Si la api recibe usuario y contraseña validos, devuelve status code 202", async ({

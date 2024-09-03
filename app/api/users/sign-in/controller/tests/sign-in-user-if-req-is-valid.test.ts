@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import { signInUserIfRequestIsValid } from "..";
-import { initDB, cleanDB } from "./utils";
+import { initDB, cleanDB } from "@/app/tests/utils";
 
 describe("Como usuario, deseo ingresar al sistema mediante mi correo y mi contraseña, para poder operar con el mismo", () => {
   test("Dado un correo y una contraseña válidos, se debe devolver un token de acceso", async () => {
