@@ -9,12 +9,8 @@ test.describe("Como usuario, quiero ingresar al sistema para poder operar con é
     await page.route("*/**/api/users/sign-in", async (route) => {
       await route.fulfill({ status: 202 });
     });
-    await page.getByPlaceholder("Email").click();
     await page.getByPlaceholder("Email").fill("jdoe@test.com");
-    await page.getByPlaceholder("Contraseña", { exact: true }).click();
-    await page
-      .getByPlaceholder("Contraseña", { exact: true })
-      .fill("passtesting");
+    await page.getByPlaceholder("Contraseña").fill("passtesting");
     await page.getByRole("button", { name: "continuar" }).click();
     await expect(page).toHaveURL("http://localhost:3000");
   });
@@ -28,12 +24,8 @@ test.describe("Como usuario, quiero ingresar al sistema para poder operar con é
         data.email === "jdoe@test.com" && data.password === "passtesting";
       await route.fulfill({ status: ok ? 202 : 401 });
     });
-    await page.getByPlaceholder("Email").click();
     await page.getByPlaceholder("Email").fill("jdoe@test.com");
-    await page.getByPlaceholder("Contraseña", { exact: true }).click();
-    await page
-      .getByPlaceholder("Contraseña", { exact: true })
-      .fill("passtesting");
+    await page.getByPlaceholder("Contraseña").fill("passtesting");
     await page.getByRole("button", { name: "continuar" }).click();
     await expect(page).toHaveURL("http://localhost:3000");
   });
