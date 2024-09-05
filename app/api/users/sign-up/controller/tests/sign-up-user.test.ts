@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
-import { signUpUserIfRequestIsValid } from "..";
+import { signUpUser } from "../signUpUser";
 import { cleanDB, initDB } from "@/app/tests/utils";
 
 describe("Como usuario, deseo registrarme en la aplicación para poder acceder a los servicios", () => {
@@ -11,8 +11,7 @@ describe("Como usuario, deseo registrarme en la aplicación para poder acceder a
       password: "passtotest",
       confirm: "passtotest",
     };
-    const result = await signUpUserIfRequestIsValid(req);
-    expect(result.message).toBe("Usuario registrado correctamente");
+    const result = await signUpUser(req);
     expect(result.status).toBe(201);
   });
 

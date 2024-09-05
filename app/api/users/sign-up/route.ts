@@ -1,10 +1,12 @@
-import { signUpUserIfRequestIsValid } from "./controller";
-import { reply } from "./response";
+import { handleSignUpUserErrors } from "./controller/handleSignUpUserErrors";
+import { signUpUser } from "./controller/signUpUser";
 
 const POST = async (req: Request): Promise<Response> => {
-  const data = await req.json();
-  const result = await signUpUserIfRequestIsValid(data);
-  return reply(result);
+  try {
+    return await signUpUser(await req.json());
+  } catch (error) {
+    return handleSignUpUserErrors(error);
+  }
 };
 
 export { POST };

@@ -1,6 +1,10 @@
-import { SignUpUserResult } from "../types";
+import { Users } from "@prisma/client";
 
-export const reply = (result: SignUpUserResult): Response => {
-  const { status } = result;
-  return Response.json(result, { status });
+type User = Users;
+
+export const reply = (user: User): Response => {
+  return Response.json(
+    { name: user.name, lastname: user.lastname, email: user.email },
+    { status: 201 },
+  );
 };

@@ -1,47 +1,31 @@
 import db from "@/db";
 import bcrypt from "bcrypt";
-import { Prisma } from "@prisma/client";
+import { Prisma, Users } from "@prisma/client";
 import { SignUpUserRequest, SignUpUserResult } from "../types";
+import { InternalServerError } from "@/app/api/errors";
 
 type SignUpUserProps = SignUpUserRequest;
+type User = Users;
 
-export const signUpUser = async (
-  props: SignUpUserProps
-): Promise<SignUpUserResult> => {
+export const create = async (props: SignUpUserProps): Promise<User> => {
   try {
-    const user = { ...props };
-    return await create(user);
+    props.password = await bcrypt.hash(props.password, 10);
+    const user = await db.users.create({
+      data: {
+        name: props.name,
+        lastname: props.lastname,
+        email: props.email,
+        password: props.password,
+      },
+    });
+    return user;
   } catch (error) {
-    return handle(error);
+    const isPrismaError =
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Prisma.PrismaClientUnknownRequestError;
+    if (isPrismaError) {
+      throw new InternalServerError(error.message);
+    }
+    throw new InternalServerError("Error desconocido");
   }
-};
-
-const CREATED = 201;
-
-const create = async (user: SignUpUserProps): Promise<SignUpUserResult> => {
-  user.password = await bcrypt.hash(user.password, 10);
-  await db.users.create({
-    data: {
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      password: user.password,
-    },
-  });
-  return {
-    status: CREATED,
-    message: "Usuario registrado correctamente",
-  };
-};
-
-const INTERNAL_SERVER_ERROR = 500;
-
-const handle = (error: unknown): SignUpUserResult => {
-  const isPrismaError =
-    error instanceof Prisma.PrismaClientKnownRequestError ||
-    error instanceof Prisma.PrismaClientUnknownRequestError;
-  return {
-    status: INTERNAL_SERVER_ERROR,
-    message: isPrismaError ? error.message : "Error desconocido",
-  };
 };
