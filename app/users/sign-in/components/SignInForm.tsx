@@ -31,6 +31,7 @@ const SignInForm = ({
           sx={{
             textTransform: "capitalize",
             fontWeight: "bold",
+            color: "white",
           }}
         >
           iniciar sesión

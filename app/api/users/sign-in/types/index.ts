@@ -12,13 +12,12 @@ export const SignInUserRequestScheme = z.object(
   {
     message:
       "La petición no contiene ninguno de los datos necesarios para ser procesado",
-  }
+  },
 );
 
 export type SignInUserRequest = z.infer<typeof SignInUserRequestScheme>;
 
 export type SignInUserResult = {
-  status: number;
   message: string;
-  token?: string;
+  token: string;
 };

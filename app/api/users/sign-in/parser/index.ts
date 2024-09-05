@@ -1,19 +1,13 @@
+import { BadRequestError } from "@/app/api/errors";
 import { SignInUserRequestScheme } from "../types";
 import type { SignInUserRequest } from "../types";
 
 export type ParsedData = SignInUserRequest;
 
-export type ParseRequestResult = {
-  parsed: boolean;
-  message: string;
-  data?: ParsedData;
-};
-
-export const parseRequest = (request: any): ParseRequestResult => {
+export const parse = (request: any): ParsedData => {
   const { success, error, data } = SignInUserRequestScheme.safeParse(request);
-  return {
-    parsed: success,
-    message: error?.message ?? "Datos parseados correctamente",
-    data: data,
-  };
+  if (!success) {
+    throw new BadRequestError(error.message);
+  }
+  return data;
 };

@@ -33,6 +33,7 @@ const SignUpForm = ({
           sx={{
             textTransform: "capitalize",
             fontWeight: "bold",
+            color: "white",
           }}
         >
           registrate
