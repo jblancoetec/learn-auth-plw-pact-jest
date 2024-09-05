@@ -18,3 +18,10 @@ export class UnauthorizedError extends HttpError {
     super(message);
   }
 }
+
+export class InternalServerError extends HttpError {
+  status = 500;
+  constructor(message: string) {
+    super(message);
+  }
+}
