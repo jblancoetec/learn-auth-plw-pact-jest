@@ -1,11 +1,11 @@
+import { authenticate } from "@/app/api/auth/authenticate";
 import { parse } from "../parser";
-import { find } from "../repo";
 import { reply } from "../response";
-import { signIn } from "../session";
+import { session } from "@/app/api/auth/session";
 
-export const signInUser = async (request: any): Promise<Response> => {
-  const data = parse(request);
-  const user = await find(data);
-  const session = signIn(user);
-  return reply(session);
+export const signInUser = async (request: Request): Promise<Response> => {
+  const data = parse(await request.json());
+  const user = await authenticate(data);
+  const token = await session(user);
+  return reply(token);
 };

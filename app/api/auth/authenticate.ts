@@ -1,13 +1,13 @@
 import db from "@/db";
 import bcrypt from "bcrypt";
 import { Prisma, Users } from "@prisma/client";
-import { SignInUserRequest } from "../types";
 import { InternalServerError, UnauthorizedError } from "@/app/api/errors";
+import { SignInUserRequest } from "../users/sign-in/types";
 
 type User = Users;
-type SignInUserProps = SignInUserRequest;
+type AuthenticateProps = SignInUserRequest;
 
-export const find = async (props: SignInUserProps): Promise<User> => {
+export const authenticate = async (props: AuthenticateProps): Promise<User> => {
   try {
     const user = await db.users.findUnique({
       where: {

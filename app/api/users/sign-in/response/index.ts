@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
-import { SignInUserResult } from "../types";
 
-export const reply = (result: SignInUserResult): Response => {
-  const { message } = result;
-  const response = NextResponse.json({ message }, { status: 202 });
+type ReplyProps = {
+  token: string;
+};
+
+export const reply = (result: ReplyProps): Response => {
+  const response = NextResponse.json(
+    { message: "Usuario autenticado correctamente" },
+    { status: 202 },
+  );
   response.cookies.set({
     name: "session",
     value: result.token,
