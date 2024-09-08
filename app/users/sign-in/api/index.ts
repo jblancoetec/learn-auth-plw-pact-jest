@@ -18,6 +18,7 @@ export const post = async (user: PostUserProps, actions: PostActions) => {
       headers: {
         "Content-Type": "application/json",
       },
+      validateStatus: (status) => status < 500,
     });
     switch (response.status) {
       case 202: {
@@ -29,7 +30,13 @@ export const post = async (user: PostUserProps, actions: PostActions) => {
         break;
       }
     }
-  } catch (error) {
-    endPostWithProblems("Parece que no hay internet");
+  } catch (error: any) {
+    if (error.response) {
+      endPostWithProblems(error.response.data.message);
+    } else if (error.request) {
+      endPostWithProblems("Tal parece que el servidor no responde");
+    } else {
+      endPostWithProblems("Parece que no hay internet");
+    }
   }
 };

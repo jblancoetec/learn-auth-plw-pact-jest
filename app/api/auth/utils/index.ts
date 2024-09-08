@@ -1,26 +1,28 @@
-import jose from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { InternalServerError } from "@/app/api/errors";
 
 const secret = process.env.JWT_SECRET ?? "secret";
+const secretKey = new TextEncoder().encode(secret);
 
 export const encryptID = async (id: string): Promise<string> => {
   try {
-    const key = await jose.generateSecret(secret);
-    const token = new jose.SignJWT({ id });
-    token.setProtectedHeader({ alg: "HS256" });
-    token.setExpirationTime("1h");
-    return await token.sign(key);
+    const signJWT = new SignJWT({ id });
+    signJWT.setProtectedHeader({ alg: "HS256" });
+    signJWT.setIssuedAt();
+    signJWT.setIssuer("auth");
+    signJWT.setAudience("auth");
+    signJWT.setExpirationTime("1h");
+    return await signJWT.sign(secretKey);
   } catch (error) {
-    throw new InternalServerError("Error al autenticar el usuario");
+    throw new InternalServerError("Error al crear credenciales");
   }
 };
 
 export const decryptID = async (token: string): Promise<string> => {
   try {
-    const key = await jose.generateSecret(secret);
-    const session = await jose.jwtVerify<{ id: string }>(token, key);
+    const session = await jwtVerify<{ id: string }>(token, secretKey);
     return session.payload?.id;
   } catch (error) {
-    throw new InternalServerError("Error al autenticar el usuario");
+    throw new InternalServerError("Error al verificar credenciales");
   }
 };

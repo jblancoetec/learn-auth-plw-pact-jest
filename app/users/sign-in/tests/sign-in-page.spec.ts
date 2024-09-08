@@ -48,15 +48,31 @@ test.describe("Como usuario, quiero ingresar al sistema para poder operar con é
     await expect(page).toHaveURL("http://localhost:3000");
   });
 
-  test.skip('Con una cuenta invalida, el sistema debe mostrar el mensaje ""', async ({
+  test('Tras recibir un 401, el sistema debe mostrar el mensaje "Usuario o contraseña incorrectos"', async ({
     page,
   }) => {
-    await page.goto("http://localhost:3001/users/sign-in");
-    await page.getByPlaceholder("Email").click();
-    await page.getByPlaceholder("Email").fill("jperez@test.com");
-    await page.getByPlaceholder("Contraseña").click();
+    await page.route("*/**/api/users/sign-in", async (route) => {
+      await route.fulfill({
+        status: 401,
+        json: { message: "Usuario o contraseña incorrectos" },
+      });
+    });
+    await page.getByPlaceholder("Email").fill("jdoe@test.com");
     await page.getByPlaceholder("Contraseña").fill("passwrong");
     await page.getByRole("button", { name: "continuar" }).click();
-    await expect(page.getByText("Parece que no hay internet")).toBeVisible();
+    await expect(
+      page.getByText("Usuario o contraseña incorrectos"),
+    ).toBeVisible();
+  });
+
+  test('Con una constraseña invalida, el sistema debe mostrar el mensaje "Usuario o contraseña incorrectos"', async ({
+    page,
+  }) => {
+    await page.getByPlaceholder("Email").fill("jdoe@test.com");
+    await page.getByPlaceholder("Contraseña").fill("passwrong");
+    await page.getByRole("button", { name: "continuar" }).click();
+    await expect(
+      page.getByText("Usuario o contraseña incorrectos"),
+    ).toBeVisible();
   });
 });

@@ -5,5 +5,8 @@ export const handleSignUpUserErrors = (error: unknown): Response => {
   if (isHttpError) {
     return Response.json({ error: error.message }, { status: error.status });
   }
-  return Response.json({ error: "Error interno desconocido" }, { status: 500 });
+  return Response.json(
+    { error: "Algo inesperado ocurrio con el servicio" },
+    { status: 500 }
+  );
 };

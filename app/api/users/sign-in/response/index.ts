@@ -6,7 +6,7 @@ type ReplyProps = {
 
 export const reply = (result: ReplyProps): Response => {
   const response = NextResponse.json(
-    { message: "Usuario autenticado correctamente" },
+    { message: "Usuario correctamente autenticado" },
     { status: 202 },
   );
   response.cookies.set({

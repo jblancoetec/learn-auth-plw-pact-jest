@@ -27,8 +27,10 @@ export const authenticate = async (props: AuthenticateProps): Promise<User> => {
       error instanceof Prisma.PrismaClientKnownRequestError ||
       error instanceof Prisma.PrismaClientUnknownRequestError;
     if (isPrismaError) {
-      throw new InternalServerError(error.message);
+      throw new InternalServerError(
+        `Error interno en la base de datos: ${error.message}`,
+      );
     }
-    throw new InternalServerError("Error interno desconocido");
+    throw error;
   }
 };

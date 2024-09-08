@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 
 export const initDB = async () => {
   try {
+    await db.users.deleteMany({});
     await db.users.create({
       data: {
         email: "jdoe@test.com",

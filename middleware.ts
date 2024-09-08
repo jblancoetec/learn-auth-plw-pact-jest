@@ -7,6 +7,4 @@ const middleware = async (req: NextRequest): Promise<NextResponse> => {
 
 export default middleware;
 
-export const config = {
-  matcher: "/api/:path*",
-};
+export const config = { matcher: "/users/dashboard/:path" };
