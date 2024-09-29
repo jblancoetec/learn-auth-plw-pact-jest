@@ -8,7 +8,7 @@ export default defineConfig({
   testMatch: "*tests/*.spec.ts",
 
   // Run all tests in parallel.
-  fullyParallel: true,
+  fullyParallel: false,
 
   // Fail the build on CI if you accidentally left test.only in the source code.
   forbidOnly: !!process.env.CI,
@@ -38,7 +38,7 @@ export default defineConfig({
   ],
   // Run your local dev server before starting the tests.
   webServer: {
-    command: "bun run start",
+    command: "bun run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
